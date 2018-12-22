@@ -1,3 +1,11 @@
+### Special instructions from @zdmc23 ###
+
+- The important file to edit is `app/res/raw/auth_config.json`; this is where you will specify the IP and port for your WordPress instance.  IF your WordPress instance is not publicly available over the Internet, then you MUST ensure that your WP instance is on the same network as your mobile phone.  Then specify the IP and port of your WP instance in this `auth_config.json` file.
+- If you need to change any of the URL information in `auth_config.json`, then remember to uninstall the AppAuth application on your mobile device because this data will be cached and you will scratch your head wondering why your new changes are not taking effect
+- Another note: sometimes you need to manually choose from "Use Browser" list in the AppAuth app once loaded; Chrome works, but Firefox Focus does NOT.  (I have not testing any other of the mobile browsers. Feel free to do so and report your results).
+- If you want to replace my pretty face with your own profile, then just edit the YAOS4WP plugin code (`oauth2-server.php`) and search for the `handle_user_request` method and replace the `name` and `picture` with the desired values (`picture` is a URL that links to an image somewhere on the Internet)
+- Finally... I have only provided a barebones proof-of-concept of accessing the WP REST API via OAuth2 and Mobile. Please just use this as a reference and make something much more useful and better looking.  Edit this app by expanding the JSON results to be a ListView, and then enable a click to get individual contacts, or create a new app from scratch and reference the way that this app performs the OAuth2 client functions. 
+
 ![AppAuth for Android](https://rawgit.com/openid/AppAuth-Android/master/appauth_lockup.svg)
 
 [![Download](https://api.bintray.com/packages/openid/net.openid/appauth/images/download.svg) ](https://bintray.com/openid/net.openid/appauth/_latestVersion)
