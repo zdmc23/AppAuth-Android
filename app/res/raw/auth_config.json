@@ -1,11 +1,12 @@
 {
-  "client_id": "",
+  "client_id": "myawesomeapp",
   "redirect_uri": "net.openid.appauthdemo:/oauth2redirect",
-  "authorization_scope": "openid email profile",
+  "authorization_scope": "basic",
   "discovery_uri": "",
-  "authorization_endpoint_uri": "",
-  "token_endpoint_uri": "",
+  "authorization_endpoint_uri": "http://192.168.1.14:8000/yaos4wp/authorize",
+  "token_endpoint_uri": "http://192.168.1.14:8000/yaos4wp/token",
   "registration_endpoint_uri": "",
-  "user_info_endpoint_uri": "",
-  "https_required": true
+  "user_info_endpoint_uri": "http://192.168.1.14:8000/yaos4wp/user",
+  "resource_endpoint_uri": "http://192.168.1.14:8000/wp-json/dt/v1/contacts",
+  "https_required": false
 }

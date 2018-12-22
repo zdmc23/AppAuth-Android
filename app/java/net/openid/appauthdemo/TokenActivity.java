@@ -69,6 +69,7 @@ public class TokenActivity extends AppCompatActivity {
     private AuthorizationService mAuthService;
     private AuthStateManager mStateManager;
     private final AtomicReference<JSONObject> mUserInfoJson = new AtomicReference<>();
+    private final AtomicReference<JSONObject> mResourceJson = new AtomicReference<>();
     private ExecutorService mExecutor;
     private Configuration mConfiguration;
 
@@ -252,7 +253,7 @@ public class TokenActivity extends AppCompatActivity {
                             .into((ImageView) findViewById(R.id.userinfo_profile));
                 }
 
-                ((TextView) findViewById(R.id.userinfo_json)).setText(mUserInfoJson.toString());
+                ((TextView) findViewById(R.id.userinfo_json)).setText(mResourceJson.toString()); //mUserInfoJson.toString());
                 userInfoCard.setVisibility(View.VISIBLE);
             } catch (JSONException ex) {
                 Log.e(TAG, "Failed to read userinfo JSON", ex);
@@ -348,11 +349,14 @@ public class TokenActivity extends AppCompatActivity {
                         .discoveryDoc;
 
         URL userInfoEndpoint;
+        URL resourceEndpoint;
         try {
             userInfoEndpoint =
                     mConfiguration.getUserInfoEndpointUri() != null
                         ? new URL(mConfiguration.getUserInfoEndpointUri().toString())
                         : new URL(discovery.getUserinfoEndpoint().toString());
+            //
+            resourceEndpoint = new URL(mConfiguration.getResourceEndpointUri().toString());
         } catch (MalformedURLException urlEx) {
             Log.e(TAG, "Failed to construct user info endpoint URL", urlEx);
             mUserInfoJson.set(null);
@@ -369,6 +373,15 @@ public class TokenActivity extends AppCompatActivity {
                 String response = Okio.buffer(Okio.source(conn.getInputStream()))
                         .readString(Charset.forName("UTF-8"));
                 mUserInfoJson.set(new JSONObject(response));
+                // Also request Resource Endpoint info
+                conn =
+                    (HttpURLConnection) resourceEndpoint.openConnection();
+                conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                conn.setInstanceFollowRedirects(false);
+                response = Okio.buffer(Okio.source(conn.getInputStream()))
+                    .readString(Charset.forName("UTF-8"));
+                mResourceJson.set(new JSONObject(response));
+
             } catch (IOException ioEx) {
                 Log.e(TAG, "Network error when querying userinfo endpoint", ioEx);
                 showSnackbar("Fetching user info failed");
